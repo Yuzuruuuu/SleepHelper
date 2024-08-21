@@ -1,0 +1,51 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Upload Audio Files
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Upload Audio Files</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <input type="file" accept="audio/*" hidden (change)="onFileSelected($event)" #fileInput />
+  <ion-button expand="full" (click)="fileInput.click()">Pick Audio File</ion-button>
+
+  <ion-list>
+    <ion-item *ngFor="let file of audios | keyvalue">
+      <ion-label>
+        {{ file.key.name }}
+      </ion-label>
+      <ion-button (click)="deleteFile(file.key)" slot="end" color="danger">
+        Delete
+      </ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+<ion-footer class="custom-footer">
+  <!-- 当前播放的文件名 -->
+  <p>Now playing: {{ currentFileName }}</p>
+
+  <!-- 播放进度条 -->
+  <ion-item>
+    <ion-range min="0" max="100" step="1" [(ngModel)]="currentProgress" color="primary"
+              (ionChange)="seekAudio($event)">
+      <ion-label slot="start">{{ formatTime(currentTime) }}</ion-label>
+      <ion-label slot="end">{{ formatTime(duration) }}</ion-label>
+    </ion-range>
+  </ion-item>
+
+  <!-- 播放控制区域 -->
+  <div class="audio-controls">
+    <ion-button (click)="playPrevious()">Previous</ion-button>
+    <ion-button (click)="togglePlayPause()">{{ isPlaying ? 'Pause' : 'Play' }}</ion-button>
+    <ion-button (click)="playNext()">Next</ion-button>
+    <ion-button (click)="toggleLooping()">Mode: {{ isLooping ? 'Single' : 'Loop' }}</ion-button>
+  </div>
+</ion-footer>

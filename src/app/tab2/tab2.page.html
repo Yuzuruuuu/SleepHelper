@@ -1,0 +1,78 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Create Your Playlist
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Create Your Playlist</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- 文件选择器 -->
+  <ion-item>
+    <ion-label>Select Audio Files</ion-label>
+    <ion-select [(ngModel)]="selectedFilePaths" (ionChange)="onFilesSelected($event)" multiple="true">
+      <ion-select-option *ngFor="let file of audios | keyvalue" [value]="file.value" [attr.data-file-name]="file.key.name">
+        {{ file.key.name }}
+      </ion-select-option>
+    </ion-select>    
+  </ion-item>
+
+  <!-- 全选按钮 -->
+  <ion-button expand="full" (click)="selectAllFiles()">Select All</ion-button>
+
+  <!-- 添加文件按钮 -->
+  <ion-button expand="full" (click)="addSelectedFiles()">Add Selected Files</ion-button>
+
+  <!-- 显示已添加文件的列表 -->
+  <!-- ul cdkDropList (cdkDropListDropped)="drop($event)">
+    <li *ngFor="let file of addedFiles; let i = index" cdkDrag>
+      <span (click)="playAudioFromList(i)">{{ file }}</span>
+      <ion-button (click)="removeFile(i)" color="danger" fill="outline">Delete</ion-button>
+    </li>
+  </ul -->
+
+  <ion-list cdkDropList (cdkDropListDropped)="drop($event)">
+    <ion-item *ngFor="let file of addedFiles; let i = index" cdkDrag>
+      <ion-label (click)="playAudioFromList(i)">
+        {{ file }}
+      </ion-label>
+      <ion-button (click)="removeFile(i)" slot="end" color="danger">
+        Delete
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+</ion-content>
+
+<!-- 音乐播放控制栏固定在底部 -->
+<ion-footer class="custom-footer">
+  <!-- 当前播放的文件名 -->
+  <p>Now playing: {{ currentFileName }}</p>
+
+  <!-- 播放进度条 -->
+  <ion-item>
+    <ion-range min="0" max="100" step="1" [(ngModel)]="currentProgress" color="primary"
+              (ionChange)="seekAudio($event)">
+      <ion-label slot="start">{{ formatTime(currentTime) }}</ion-label>
+      <ion-label slot="end">{{ formatTime(duration) }}</ion-label>
+    </ion-range>
+  </ion-item>
+
+  <!-- 播放控制区域 -->
+  <div class="audio-controls">
+    <ion-button (click)="playPrevious()">Previous</ion-button>
+    <ion-button (click)="isPlaying ? pauseAudio() : playAudio(currentAudioIndex)">
+      {{ isPlaying ? 'Pause' : 'Play' }}
+    </ion-button>
+    <ion-button (click)="playNext()">Next</ion-button>
+    <ion-button (click)="togglePlayMode()">
+      Mode: {{ playMode === 'loop' ? 'Loop' : 'Single' }}
+    </ion-button>
+  </div>
+</ion-footer>

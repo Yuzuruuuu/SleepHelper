@@ -1,0 +1,11 @@
+.audio-controls {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.custom-footer {
+    background-color: #ffffff; /* 设置背景颜色为白色，可以更改为你喜欢的颜色 */
+    opacity: 1; /* 确保不透明 */
+    border-top: 1px solid #ccc; /* 可选：添加顶部边框，使其与内容分隔 */
+}

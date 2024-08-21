@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Connect to Pillow
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-button (click)="scanForBluetoothDevices()" expand="block" color="primary">Scan for Devices</ion-button>
+  <!-- ion-button (click)="toggle()">toogle</ion-button -->
+
+  <ion-item *ngIf="bluetoothConnectedDevice">
+    <ion-button (click)="disconnectFromBluetoothDevice()" slot="end" color="danger">
+      Disconnect
+    </ion-button>
+    <ion-label>
+      Connected Device: {{ bluetoothConnectedDevice.device.name ?? bluetoothConnectedDevice.device.deviceId }}
+    </ion-label>
+  </ion-item>
+
+  <ion-list>
+    <ion-item *ngIf="bluetoothScanResults.length === 0 && !bluetoothIsScanning">
+      No Bluetooth devices found.
+    </ion-item>
+    <ion-item *ngIf="bluetoothIsScanning">
+      Scanning for devices...
+    </ion-item>
+    <ion-item *ngFor="let device of bluetoothScanResults">
+      <ion-label>{{ device.device.name ?? device.device.deviceId }}</ion-label>
+      <ion-button (click)="connectToBluetoothDevice(device)" slot="end" color="success" [disabled]="bluetoothIsScanning || bluetoothConnectedDevice">
+        Connect
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+  <!-- 显示接收到的数据 -->
+  <!-- ion-card>
+    <ion-card-header>
+      <ion-card-title>Received Data</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>{{ receivedData }}</p>
+    </ion-card-content>
+  </ion-card -->
+
+</ion-content>
